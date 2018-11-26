@@ -73,8 +73,21 @@ module.exports = function(RED) {
       // Looks like the btPresence Object does survive. Remove the
       // Listeners before we add the new one
       btp.removeAllListeners();
-      btp.on('present', sendPresent);
-      btp.on('not-present', sendNotPresent);
+
+      if (config.allpings) {
+        node.log("All pings will be reported");
+        btp.on('ping-result', (res) => {
+          const msg = {
+            title: "Ping Result",
+            topic: config.topic + "/" + res.address,
+            payload: res.isPresent
+          };
+          node.send(msg)
+        });
+      } else {
+        btp.on('present', sendPresent);
+        btp.on('not-present', sendNotPresent);
+      }
 
       node.log("Starting Bluetooth scan for "+ devices.length + " devices every "+ interval + " seconds!");
       btp.start(true);

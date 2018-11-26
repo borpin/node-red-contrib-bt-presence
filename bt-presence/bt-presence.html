@@ -25,10 +25,33 @@
         <label for="node-input-interval"><i class="fa fa-dot-circle-o"></i> Interval</label>
         <input type="text" id="node-input-interval" placeholder="60">
     </div>
+    <div class="form-row">
+        <label>&nbsp;</label>
+        <input type="checkbox" id="node-input-allpings" style="display: inline-block; width: auto; vertical-align: top;">
+        <label for="node-input-allpings" style="width: 70%;">All Pings ?</label>
+    </div>
+    <div class="form-row">
+        <label for="node-input-topic"><i class="fa fa fa-tag"></i> Base Topic:</label>
+        <input type="text" id="node-input-topic" placeholder="topic (no final slash)">
+    </div>
 </script>
 
 <script type="text/x-red" data-help-name="bt-presence">
+    <h1>Description</h1>
     <p>Scan for available bluetooth devices using l2ping</p>
+    <h2>Devices</h2>
+    <p>One or more Bluetooth Mac Addresses separated by a comma.</p>
+    <h2>Interval</h2>
+    <p>Rate of pings (default 60s)</p>
+    <h2>All Pings</h2>
+    <p>There are 2 modes</p>
+    <ul>
+        <li><b>unchecked</b> - Node will only report changes (original mode) no topic set.</li>
+        <li><b>checked</b> - Node will report every ping. <code>msg</code> will include <code>topic/macaddress</code> 
+            with a payload of true for present and false for not present.</li>
+    </ul>    
+    <h2>Topic</h2>
+    <p>Any topic set will prepend the mac address as a <code>msg.topic</code> when all pings is checked.  Do not add a final slash.</p>
 </script>
 
 <script type="text/javascript">
@@ -38,7 +61,9 @@
         defaults: {
             name: {value:""},
             devices: {value:""},
-            interval: {value:"60"}
+            interval: {value:"60"},
+            allpings: {value: false},
+            topic: {value: ""}
         },
         inputs:0,
         outputs:1,
